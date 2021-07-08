@@ -34,4 +34,7 @@ module Functions (F : Ctypes.FOREIGN) = struct
   let pm_read =
     foreign "Pm_Read"
       (ptr void @-> ptr Types.PmEvent.t @-> int32_t @-> returning int)
+
+  let pm_poll =
+    foreign "Pm_Poll" (ptr void @-> returning int)
 end

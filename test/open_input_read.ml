@@ -44,7 +44,12 @@ let () =
         printf "got %d records\n" (List.length lst);
         List.iter lst ~f:(fun pme ->
             let sexp = Portmidi.Portmidi_event.sexp_of_t pme in
-            print_endline (Sexp.to_string_hum sexp));
+            print_endline (Sexp.to_string_hum sexp);
+            let msg = pme.Portmidi.Portmidi_event.message in
+            printf "status: %ld\n" (Portmidi.message_status msg);
+            printf "data1: %ld\n" (Portmidi.message_data1 msg);
+            printf "data2: %ld\n" (Portmidi.message_data2 msg);
+          );
         loop ()
     in
     loop ()

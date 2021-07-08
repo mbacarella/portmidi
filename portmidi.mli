@@ -32,6 +32,10 @@ module Portmidi_event : sig
   [@@deriving sexp, fields]
 end
 
+val message_status : int32 -> int32
+val message_data1 : int32 -> int32
+val message_data2 : int32 -> int32
+
 module Input_stream : sig
   type t
 end
@@ -54,6 +58,8 @@ val open_input :
      device_id:int
   -> buffer_size:int32
   -> (Input_stream.t, Portmidi_error.t) result
+
+val poll_input : Input_stream.t -> (bool, Portmidi_error.t) result
 
 val read_input :
      length:int

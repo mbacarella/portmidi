@@ -12,21 +12,6 @@ module Device_info = struct
   [@@deriving sexp, fields]
 end
 
-(*
-let char_array_as_string a =
-  let len = Array.length a in
-  let b = Buffer.create len in
-  try
-    for i = 0 to len -1 do
-      let c = Array.get a i in
-      if Char.(=) c '\x00'
-      then raise Exit
-      else Buffer.add_char b c
-    done;
-    Buffer.contents b
-  with Exit -> Buffer.contents b
-*)
-
 module Portmidi_error = struct
  type t =
    [ `Got_data
@@ -47,6 +32,10 @@ module Portmidi_event = struct
     ; timestamp : Int32.t }
   [@@deriving sexp, fields]
 end
+
+let message_status msg = Int32.bit_and msg 0xFFl
+let message_data1 msg = Int32.bit_and (Int32.(lsr) msg 8) 0xFFl
+let message_data2 msg = Int32.bit_and (Int32.(lsr) msg 16) 0xFFl
 
 module Input_stream = struct
   type t = unit Ctypes_static.ptr
@@ -132,6 +121,16 @@ module Functions = struct
     | Ok () -> Ok (!@ stream)
     | Error err -> Error err
 
+  let poll_input stream =
+    match pm_poll stream with
+    | 0 -> Ok false
+    | 1 -> Ok true
+    | x ->
+      begin match Data.result_of_pm_error x with
+      | Ok () -> failwithf "poll_input: expected error here" ()
+      | Error _ as e -> e
+      end
+
   let read_input ~length stream =
     let open Ctypes in
     let buffer = allocate_n C.Types.PmEvent.t ~count:length in
@@ -143,13 +142,13 @@ module Functions = struct
         let a = CArray.from_ptr buffer retval in
         List.map (CArray.to_list a) ~f:(fun pme ->
             { Portmidi_event.
-              message = get pme PME.pm_message
-            ; timestamp = get pme PME.pm_timestamp })
+              message = get pme PME.message
+            ; timestamp = get pme PME.timestamp })
       in
       Ok lst
     end else begin
       match Data.result_of_pm_error retval with
-      | Ok () -> failwithf "this was supposed to be an error" ()
+      | Ok () -> failwithf "read_input: expected error here" ()
       | Error _ as e -> e
     end
 
