@@ -27,10 +27,32 @@ let char_array_as_string a =
   with Exit -> Buffer.contents b
 *)
 
+module Portmidi_error = struct
+ type t =
+   [ `Got_data
+   | `Host_error
+   | `Invalid_device_id
+   | `Insufficient_memory
+   | `Buffer_too_small
+   | `Bad_ptr
+   | `Bad_data
+   | `Internal_error
+   | `Buffer_max_size ]
+ [@@deriving sexp]
+end
+
+module Input_stream = struct
+  type t = unit Ctypes_static.ptr Ctypes.ptr
+end
+
+module Output_stream = struct
+  type t = unit Ctypes_static.ptr Ctypes.ptr
+end
+
 module Data = struct
   open C.Types
 
-  let result_of_pm_error i =
+  let result_of_pm_error i : (unit, Portmidi_error.t) result =
     let open Pm_error in
     if Int.(=) i no_error then Ok ()
     else if Int.(=) i no_data then Ok ()
@@ -45,8 +67,21 @@ module Data = struct
     else if Int.(=) i buffer_max_size then Error `Buffer_max_size
     else failwithf "unknown PmError code: %d" i ()
 
+  let pm_error_int i =
+    let open Pm_error in
+    match i with
+    | `Got_data -> got_data
+    | `Host_error -> host_error
+    | `Invalid_device_id -> invalid_device_id
+    | `Insufficient_memory -> insufficient_memory
+    | `Buffer_too_small -> buffer_too_small
+    | `Bad_ptr -> bad_ptr
+    | `Bad_data -> bad_data
+    | `Internal_error -> internal_error
+    | `Buffer_max_size -> buffer_max_size
+
   let device_info_of_pdi pdi =
-    let module PDI = Portmidi_device_info in
+    let module PDI = PmDeviceInfo in
     let get x f = Ctypes.getf x f in
     { Device_info.struct_version_internal = get pdi PDI.struct_version
     ; interface = get pdi PDI.interf
@@ -58,12 +93,16 @@ module Data = struct
   let default_sysex_buffer_size = default_sysex_buffer_size
 end
 
+let default_sysex_buffer_size = Data.default_sysex_buffer_size
+
 module Functions = struct
   (*open Ctypes*)
   open C.Functions
 
   let initialize () = Data.result_of_pm_error (pm_initialize ())
+
   let terminate () = pm_terminate ()
+
   let count_devices () = pm_count_devices ()
 
   let get_device_info index =
@@ -71,6 +110,29 @@ module Functions = struct
     if Ctypes.is_null di
     then None
     else Some (Data.device_info_of_pdi (Ctypes.( !@ ) di))
+
+  let get_error_text err =
+    pm_get_error_text (Data.pm_error_int err)
+
+  let open_input ~device_id ~buffer_size =
+    let open Ctypes in
+    let stream = allocate (ptr void) null in
+    let res = pm_open_input stream device_id null buffer_size null null in
+    match Data.result_of_pm_error res with
+    | Ok () -> Ok stream
+    | Error err -> Error err
+
+  let open_output ~device_id ~buffer_size ~latency =
+    let open Ctypes in
+    let stream = allocate (ptr void) null in
+    let res = pm_open_output stream device_id null buffer_size null null latency in
+    match Data.result_of_pm_error res with
+    | Ok () -> Ok stream
+    | Error err -> Error err
+
+  let close stream = Data.result_of_pm_error (pm_close stream)
+  let close_input = close
+  let close_output = close
 end
 
 include Functions
