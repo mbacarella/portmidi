@@ -24,8 +24,14 @@ module Functions (F : Ctypes.FOREIGN) = struct
 
   let pm_open_output =
     foreign "Pm_OpenOutput"
-      ((ptr (ptr void)) @-> int @-> (ptr void) @-> int32_t
+      ((ptr (ptr void)) @-> int @-> ptr void @-> int32_t
        @-> (ptr void) @-> (ptr void) @-> int32_t @-> returning int)
 
-  let pm_close = foreign "Pm_Close" ((ptr (ptr void)) @-> returning int)
+  let pm_abort = foreign "Pm_Abort" (ptr void @-> returning int)
+
+  let pm_close = foreign "Pm_Close" (ptr void @-> returning int)
+
+  let pm_read =
+    foreign "Pm_Read"
+      (ptr void @-> ptr Types.PmEvent.t @-> int32_t @-> returning int)
 end

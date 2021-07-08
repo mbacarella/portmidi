@@ -31,4 +31,12 @@ module Types (F : Ctypes.TYPE) = struct
     let opened = field t "opened" int
     let () = seal t
   end
+
+  module PmEvent = struct
+    type t = [`PmEvent] structure
+    let t : t typ = typedef (structure "`PmEvent") "PmEvent"
+    let pm_message = field t "message" int32_t
+    let pm_timestamp = field t "timestamp" int32_t
+    let () = seal t
+  end
 end

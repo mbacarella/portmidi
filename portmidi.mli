@@ -25,6 +25,13 @@ module Portmidi_error : sig
  [@@deriving sexp]
 end
 
+module Portmidi_event : sig
+  type t =
+    { message : int32
+    ; timestamp: int32 }
+  [@@deriving sexp, fields]
+end
+
 module Input_stream : sig
   type t
 end
@@ -48,12 +55,21 @@ val open_input :
   -> buffer_size:int32
   -> (Input_stream.t, Portmidi_error.t) result
 
+val read_input :
+     length:int
+  -> Input_stream.t
+  -> (Portmidi_event.t list, Portmidi_error.t) result
+
+val abort_input : Input_stream.t -> (unit, Portmidi_error.t) result
+
+val close_input : Input_stream.t -> (unit, Portmidi_error.t) result
+
 val open_output :
      device_id:int
   -> buffer_size:int32
   -> latency:int32
   -> (Output_stream.t, Portmidi_error.t) result
 
-val close_input : Input_stream.t -> (unit, Portmidi_error.t) result
+val abort_output : Output_stream.t -> (unit, Portmidi_error.t) result
 
 val close_output : Output_stream.t -> (unit, Portmidi_error.t) result

@@ -41,12 +41,19 @@ module Portmidi_error = struct
  [@@deriving sexp]
 end
 
+module Portmidi_event = struct
+  type t =
+    { message : Int32.t
+    ; timestamp : Int32.t }
+  [@@deriving sexp, fields]
+end
+
 module Input_stream = struct
-  type t = unit Ctypes_static.ptr Ctypes.ptr
+  type t = unit Ctypes_static.ptr
 end
 
 module Output_stream = struct
-  type t = unit Ctypes_static.ptr Ctypes.ptr
+  type t = unit Ctypes_static.ptr
 end
 
 module Data = struct
@@ -114,24 +121,54 @@ module Functions = struct
   let get_error_text err =
     pm_get_error_text (Data.pm_error_int err)
 
+  let close stream = Data.result_of_pm_error (pm_close stream)
+  let abort stream = Data.result_of_pm_error (pm_abort stream)
+
   let open_input ~device_id ~buffer_size =
     let open Ctypes in
     let stream = allocate (ptr void) null in
     let res = pm_open_input stream device_id null buffer_size null null in
     match Data.result_of_pm_error res with
-    | Ok () -> Ok stream
+    | Ok () -> Ok (!@ stream)
     | Error err -> Error err
+
+  let read_input ~length stream =
+    let open Ctypes in
+    let buffer = allocate_n C.Types.PmEvent.t ~count:length in
+    let retval = pm_read stream buffer (Int32.of_int_exn length) in
+    if Int.(>=) retval 0 then begin
+      let module PME = C.Types.PmEvent in
+      let get x f = Ctypes.getf x f in
+      let lst =
+        let a = CArray.from_ptr buffer retval in
+        List.map (CArray.to_list a) ~f:(fun pme ->
+            { Portmidi_event.
+              message = get pme PME.pm_message
+            ; timestamp = get pme PME.pm_timestamp })
+      in
+      Ok lst
+    end else begin
+      match Data.result_of_pm_error retval with
+      | Ok () -> failwithf "this was supposed to be an error" ()
+      | Error _ as e -> e
+    end
+
+  let abort_input = abort
+
+  let close_input = close
 
   let open_output ~device_id ~buffer_size ~latency =
     let open Ctypes in
     let stream = allocate (ptr void) null in
-    let res = pm_open_output stream device_id null buffer_size null null latency in
+    let res =
+      pm_open_output stream device_id null buffer_size null null latency
+    in
     match Data.result_of_pm_error res with
-    | Ok () -> Ok stream
-    | Error err -> Error err
+    | Ok () -> Ok (!@ stream)
+    | Error _ as e -> e
 
-  let close stream = Data.result_of_pm_error (pm_close stream)
-  let close_input = close
+  let abort_output = abort
+
   let close_output = close
 end
 
