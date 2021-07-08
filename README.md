@@ -11,4 +11,4 @@ Installing
 Status
 ===
 
-Work in progress.
+Not functional.     Work in progress.
