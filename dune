@@ -1,3 +1,3 @@
 (library
   (public_name portmidi)
-  (libraries ctypes portmidi.c))
+  (libraries base ctypes portmidi.c))
