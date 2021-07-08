@@ -10,7 +10,10 @@ module Types (F : Ctypes.TYPE) = struct
     let invalid_device_id = constant "pmInvalidDeviceId" int
     let insufficient_memory = constant "pmInsufficientMemory" int
     let buffer_too_small = constant "pmBufferTooSmall" int
-    (* TODO: etc *)
+    let bad_ptr = constant "pmBadPtr" int
+    let bad_data = constant "pmBadData" int
+    let internal_error = constant "pmInternalError" int
+    let buffer_max_size = constant "pmBufferMaxSize" int
   end
 
   let default_sysex_buffer_size = constant "PM_DEFAULT_SYSEX_BUFFER_SIZE" int

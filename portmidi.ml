@@ -30,7 +30,7 @@ let char_array_as_string a =
 module Data = struct
   open C.Types
 
-  let result_of_int i =
+  let result_of_pm_error i =
     let open Pm_error in
     if Int.(=) i no_error then Ok ()
     else if Int.(=) i no_data then Ok ()
@@ -39,6 +39,10 @@ module Data = struct
     else if Int.(=) i invalid_device_id then Error `Invalid_device_id
     else if Int.(=) i insufficient_memory then Error `Insufficient_memory
     else if Int.(=) i buffer_too_small then Error `Buffer_too_small
+    else if Int.(=) i bad_ptr then Error `Bad_ptr
+    else if Int.(=) i bad_data then Error `Bad_data
+    else if Int.(=) i internal_error then Error `Internal_error
+    else if Int.(=) i buffer_max_size then Error `Buffer_max_size
     else failwithf "unknown PmError code: %d" i ()
 
   let device_info_of_pdi pdi =
@@ -58,9 +62,10 @@ module Functions = struct
   (*open Ctypes*)
   open C.Functions
 
-  let initialize () = Data.result_of_int (pm_initialize ())
+  let initialize () = Data.result_of_pm_error (pm_initialize ())
   let terminate () = pm_terminate ()
-  let count_devices = pm_count_devices
+  let count_devices () = pm_count_devices ()
+
   let get_device_info index =
     let di = pm_get_device_info index in
     if Ctypes.is_null di
