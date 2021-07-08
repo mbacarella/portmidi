@@ -32,8 +32,10 @@ let () =
 let () =
   let device_id = Int.of_string Sys.argv.(1) in
   match Portmidi.open_input ~device_id ~buffer_size:1024l with
-  | Ok _stream ->
-    printf "device %d successfully opened for input!\n" device_id
+  | Ok stream ->
+    printf "device %d successfully opened for input!\n" device_id;
+    let _ = Portmidi.close_input stream in
+    ()
   | Error err ->
     printf "device %d failed to open for input: %s\n"
       device_id
