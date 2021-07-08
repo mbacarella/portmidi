@@ -1,32 +1,32 @@
 module Types (F : Ctypes.TYPE) = struct
   open Ctypes
   open F
-  let mpg123_api_version = constant "MPG123_API_VERSION" int
-  let mpg123_ok = constant "MPG123_OK" int
-  let mpg123_done = constant "MPG123_DONE" int
 
-  let mpg123_id3 = constant "MPG123_ID3" int
-  let mpg123_new_id3 = constant "MPG123_NEW_ID3" int
-  let mpg123_icy = constant "MPG123_ICY" int
-  let mpg123_new_icy = constant "MPG123_NEW_ICY" int
-
-  (* these come from fmt123.h, included by mpg123.h *)
-  let mpg123_enc_signed16 = constant "MPG123_ENC_SIGNED_16" int
-  let mpg123_enc_float32 = constant "MPG123_ENC_FLOAT_32" int
-
-  module Handle = struct
-    type t = [`Handle] structure
-    let t : t typ = typedef (structure "`Handle") "mpg123_handle"
+  module Pm_error = struct
+    let no_error = constant "pmNoError" int
+    let no_data = constant "pmNoData" int
+    let got_data = constant "pmGotData" int
+    let host_error = constant "pmHostError" int
+    let invalid_device_id = constant "pmInvalidDeviceId" int
+    let insufficient_memory = constant "pmInsufficientMemory" int
+    let buffer_too_small = constant "pmBufferTooSmall" int
+    (* TODO: etc *)
   end
 
-  module Portmidi_string = struct
-    type t = [`Portmidi_string] structure
-    let t : t typ = typedef (structure "`Portmidi_string") "mpg123_string"
-    let p    = field t "p" (ptr char)
-    let size = field t "size" int
-    let fill = field t "fill" int
+  let default_sysex_buffer_size = constant "PM_DEFAULT_SYSEX_BUFFER_SIZE" int
+
+  module Portmidi_device_info = struct
+    type t = [`Portmidi_device_info] structure
+    let t : t typ = typedef (structure "`Portmidi_device_info") "PmDeviceInfo"
+    let struct_version = field t "structVersion" int
+    let interf = field t "interf" (ptr char)
+    let name = field t "name" (ptr char)
+    let input = field t "input" int
+    let output = field t "output" int
+    let opened = field t "opened" int
     let () = seal t
   end
+  (*
   module Portmidi_text = struct
     type t = [`Portmidi_text] structure
     let t : t typ   = typedef (structure "`Portmidi_text") "mpg123_text"
@@ -78,4 +78,5 @@ module Types (F : Ctypes.TYPE) = struct
     let pictures = field t "pictures" int
     let () = seal t
   end
+  *)
 end
