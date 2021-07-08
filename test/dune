@@ -1,0 +1,3 @@
+(executable
+  (name list_devices)
+  (libraries core_kernel portmidi))
