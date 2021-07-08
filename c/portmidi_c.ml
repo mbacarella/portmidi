@@ -1,0 +1,2 @@
+module Portmidi_c_types = Portmidi_c_types
+module Portmidi_c_generated_functions = Portmidi_c_generated_functions
