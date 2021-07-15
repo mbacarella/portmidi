@@ -18,5 +18,5 @@
     conf-pkg-config
     ctypes
     ctypes-foreign
-    conf-libportmidi
+;    conf-libportmidi
   ))
