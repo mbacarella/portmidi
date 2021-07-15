@@ -14,7 +14,6 @@ depends: [
   "conf-pkg-config"
   "ctypes"
   "ctypes-foreign"
-  "conf-libportmidi"
 ]
 build: [
   ["dune" "subst"] {pinned}
