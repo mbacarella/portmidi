@@ -1,4 +1,5 @@
 (library
-  (public_name portmidi)
-  (libraries core_kernel ctypes portmidi.c)
-  (preprocess (pps ppx_jane)))
+ (public_name portmidi)
+ (libraries core_kernel ctypes portmidi.c)
+ (preprocess
+  (pps ppx_jane)))
