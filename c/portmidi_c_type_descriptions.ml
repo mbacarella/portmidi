@@ -17,11 +17,11 @@ module Types (F : Ctypes.TYPE) = struct
   end
 
   let default_sysex_buffer_size = constant "PM_DEFAULT_SYSEX_BUFFER_SIZE" int
-
   let pm_host_error_msg_len = constant "PM_HOST_ERROR_MSG_LEN" int
 
   module PmDeviceInfo = struct
-    type t = [`PmDeviceInfo] structure
+    type t = [ `PmDeviceInfo ] structure
+
     let t : t typ = typedef (structure "`PmDeviceInfo") "PmDeviceInfo"
     let struct_version = field t "structVersion" int
     let interf = field t "interf" string_opt
@@ -33,7 +33,8 @@ module Types (F : Ctypes.TYPE) = struct
   end
 
   module PmEvent = struct
-    type t = [`PmEvent] structure
+    type t = [ `PmEvent ] structure
+
     let t : t typ = typedef (structure "`PmEvent") "PmEvent"
     let message = field t "message" int32_t
     let timestamp = field t "timestamp" int32_t

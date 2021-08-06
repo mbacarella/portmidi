@@ -37,8 +37,10 @@ let () =
     let rec loop () =
       match Portmidi.read_input ~length:10 stream with
       | Error err ->
-        failwithf "failed to read 1: %s"
-          (Portmidi.get_error_text err |> Option.value ~default:"null") ()
+        failwithf
+          "failed to read 1: %s"
+          (Portmidi.get_error_text err |> Option.value ~default:"null")
+          ()
       | Ok [] -> loop ()
       | Ok lst ->
         printf "got %d records\n" (List.length lst);
@@ -48,15 +50,14 @@ let () =
             let msg = pme.Portmidi.Portmidi_event.message in
             printf "status: %ld\n" (Portmidi.message_status msg);
             printf "data1: %ld\n" (Portmidi.message_data1 msg);
-            printf "data2: %ld\n" (Portmidi.message_data2 msg);
-          );
+            printf "data2: %ld\n" (Portmidi.message_data2 msg));
         loop ()
     in
     loop ()
   | Error err ->
-    printf "device %d failed to open for input: %s\n"
+    printf
+      "device %d failed to open for input: %s\n"
       device_id
       (Option.value ~default:"null" @@ Portmidi.get_error_text err)
 
-let () =
-  Portmidi.terminate ()
+let () = Portmidi.terminate ()
