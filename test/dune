@@ -1,4 +1,5 @@
 (executables
-  (names list_devices open_input open_input_read open_output)
-  (libraries core_kernel portmidi)
-  (preprocess (pps ppx_jane)))
+ (names list_devices open_input open_input_read open_output)
+ (libraries core_kernel portmidi)
+ (preprocess
+  (pps ppx_jane)))

@@ -32,7 +32,7 @@ let () =
 let () =
   let num_devices = Portmidi.count_devices () in
   printf "number of devices: %d\n" num_devices;
-  for i=0 to (pred num_devices); do
+  for i = 0 to pred num_devices do
     printf "device %d\n" i;
     match Portmidi.get_device_info i with
     | None -> printf "device %d not found\n" i
@@ -40,8 +40,7 @@ let () =
       printf "      name: %s\n" (Option.value ~default:"null" di.Portmidi.Device_info.name);
       printf " interface: %s\n" (Option.value ~default:"null" di.Portmidi.Device_info.interface);
       printf "     input: %B\n" di.Portmidi.Device_info.input;
-      printf "    output: %B\n" di.Portmidi.Device_info.output;
+      printf "    output: %B\n" di.Portmidi.Device_info.output
   done
 
-let () =
-  Portmidi.terminate ()
+let () = Portmidi.terminate ()
