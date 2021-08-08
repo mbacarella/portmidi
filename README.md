@@ -6,9 +6,9 @@ minimize the bugspace.
 Installing
 ===
 
-`opam install portmidi`
+`#opam install portmidi`
 
 Status
-===
+---
 
-Not functional.  Work in progress.
+Not released to opam yet.  Try `opam pin add portmidi git+https://github.com/mbacarella/portmidi`
