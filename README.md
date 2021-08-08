@@ -11,4 +11,8 @@ Installing
 Status
 ---
 
-Not released to opam yet.  Try `opam pin add portmidi git+https://github.com/mbacarella/portmidi`
+Not released to opam yet.  Try
+
+```
+opam pin add portmidi git+https://github.com/mbacarella/portmidi
+```
