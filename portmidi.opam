@@ -14,6 +14,7 @@ depends: [
   "conf-pkg-config"
   "ctypes"
   "ctypes-foreign"
+  "ppx_jane"
 ]
 build: [
   ["dune" "subst"] {pinned}
