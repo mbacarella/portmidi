@@ -12,7 +12,8 @@ depends: [
   "dune" {>= "2.0"}
   "dune-configurator"
   "conf-pkg-config"
-  "ctypes"
+  "core_kernel"
+  "ctypes" {>= "0.13.0"}
   "ctypes-foreign"
   "ppx_jane"
 ]
@@ -30,3 +31,4 @@ build: [
     "@doc" {with-doc}
   ]
 ]
+dev-repo: "git+https://github.com/mbacarella/portmidi.git"

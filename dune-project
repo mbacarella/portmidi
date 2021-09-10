@@ -12,7 +12,8 @@
 
 (homepage "https://github.com/mbacarella/portmidi")
 
-(bug_reports "https://github.com/mbacarella/portmidi/issues")
+(source
+ (github mbacarella/portmidi))
 
 (package
  (name portmidi)
@@ -25,7 +26,9 @@
    (>= 2.0))
   dune-configurator
   conf-pkg-config
-  ctypes
+  core_kernel
+  (ctypes
+   (>= 0.13.0))
   ctypes-foreign
   ;    conf-libportmidi
   ppx_jane))
