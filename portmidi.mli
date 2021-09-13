@@ -64,7 +64,8 @@ val open_output
   latency:int32 ->
   (Output_stream.t, Portmidi_error.t) result
 
-(*val write_output : Output_stream.t -> Portmidi_event.t list -> (unit, Portmidi_error.t) result*)
+val write_output : Output_stream.t -> Portmidi_event.t list -> (unit, Portmidi_error.t) result
+
 val write_output_sysex
   :  when_:int ->
   msg:char array ->

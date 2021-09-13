@@ -169,18 +169,28 @@ module Functions = struct
     | Ok () -> Ok !@stream
     | Error _ as e -> e
 
-  (*
   let write_output stream lst =
     let open Ctypes in
     let length = List.length lst in
-    let buffer = allocate_n C.Types.PmEvent.t ~count:length in
-    let retval = pm_write stream buffer (Int32.of_int_exn length) in
-    if Int.( = ) retval 0 then Ok ()
-    else
-      (match Data.result_of_pm_error retval with
+    let a =
+      let lst =
+        let module PME = C.Types.PmEvent in
+        List.map lst ~f:(fun portmidi_event ->
+            let pme = make PME.t in
+            setf pme PME.message portmidi_event.Portmidi_event.message;
+            setf pme PME.timestamp portmidi_event.Portmidi_event.timestamp;
+            pme)
+      in
+      let a = CArray.of_list C.Types.PmEvent.t lst in
+      CArray.start a
+    in
+    let retval = pm_write stream a (Int32.of_int_exn length) in
+    if Int.( = ) retval 0
+    then Ok ()
+    else (
+      match Data.result_of_pm_error retval with
       | Ok () -> failwithf "write_output: expected error here" ()
       | Error _ as e -> e)
-     *)
 
   let write_output_sysex ~when_ ~msg stream =
     let open Ctypes in
