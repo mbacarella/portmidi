@@ -27,17 +27,19 @@ module Portmidi_error : sig
   [@@deriving sexp]
 end
 
+val message_status : int32 -> int32
+val message_data1 : int32 -> int32
+val message_data2 : int32 -> int32
+
 module Portmidi_event : sig
   type t =
     { message : int32;
       timestamp : int32
     }
   [@@deriving sexp, fields]
-end
 
-val message_status : int32 -> int32
-val message_data1 : int32 -> int32
-val message_data2 : int32 -> int32
+  val create : status:char -> data1:char -> data2:char -> timestamp:int32 -> t
+end
 
 module Input_stream : sig
   type t

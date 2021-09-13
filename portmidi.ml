@@ -28,17 +28,29 @@ module Portmidi_error = struct
   [@@deriving sexp, variants]
 end
 
+let message_status msg = Int32.bit_and msg 0xFFl
+let message_data1 msg = Int32.bit_and (Int32.( lsr ) msg 8) 0xFFl
+let message_data2 msg = Int32.bit_and (Int32.( lsr ) msg 16) 0xFFl
+
 module Portmidi_event = struct
   type t =
     { message : Int32.t;
       timestamp : Int32.t
     }
   [@@deriving sexp, fields]
-end
 
-let message_status msg = Int32.bit_and msg 0xFFl
-let message_data1 msg = Int32.bit_and (Int32.( lsr ) msg 8) 0xFFl
-let message_data2 msg = Int32.bit_and (Int32.( lsr ) msg 16) 0xFFl
+  let create ~status ~data1 ~data2 ~timestamp =
+    let message =
+      let status = Char.to_int status |> Int32.of_int_exn in
+      let data1 = Char.to_int data1 |> Int32.of_int_exn in
+      let data2 = Char.to_int data2 |> Int32.of_int_exn in
+      let status_masked = Int32.bit_and status 0xFFl in
+      let data1_masked = Int32.bit_and (Int32.( lsl ) data1 8) 0xFFl in
+      let data2_masked = Int32.bit_and (Int32.( lsl ) data2 16) 0xFFl in
+      Int32.bit_or status_masked data1_masked |> Int32.bit_or data2_masked
+    in
+    { message; timestamp }
+end
 
 module Input_stream = struct
   type t = unit Ctypes_static.ptr
