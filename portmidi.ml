@@ -169,6 +169,34 @@ module Functions = struct
     | Ok () -> Ok !@stream
     | Error _ as e -> e
 
+  (*
+  let write_output stream lst =
+    let open Ctypes in
+    let length = List.length lst in
+    let buffer = allocate_n C.Types.PmEvent.t ~count:length in
+    let retval = pm_write stream buffer (Int32.of_int_exn length) in
+    if Int.( = ) retval 0 then Ok ()
+    else
+      (match Data.result_of_pm_error retval with
+      | Ok () -> failwithf "write_output: expected error here" ()
+      | Error _ as e -> e)
+     *)
+
+  let write_output_sysex ~when_ ~msg stream =
+    let open Ctypes in
+    let msg =
+      let len = Array.length msg in
+      let b = CArray.make char ~initial:'\x00' len in
+      for i = 0 to pred len; do
+        CArray.set b i (Array.get msg i)
+      done;
+      CArray.start b
+    in
+    let res = pm_write_sysex stream (Int32.of_int_exn when_) msg in
+    match Data.result_of_pm_error res with
+    | Ok () -> Ok !@stream
+    | Error _ as e -> e
+
   let abort_output = abort
   let close_output = close
 end
