@@ -187,7 +187,7 @@ module Functions = struct
     let msg =
       let len = Array.length msg in
       let b = CArray.make char ~initial:'\x00' len in
-      for i = 0 to pred len; do
+      for i = 0 to pred len do
         CArray.set b i (Array.get msg i)
       done;
       CArray.start b

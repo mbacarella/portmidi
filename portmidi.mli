@@ -65,7 +65,11 @@ val open_output
   (Output_stream.t, Portmidi_error.t) result
 
 (*val write_output : Output_stream.t -> Portmidi_event.t list -> (unit, Portmidi_error.t) result*)
-val write_output_sysex : when_:int -> msg:char array -> Output_stream.t -> (unit, Portmidi_error.t) result
+val write_output_sysex
+  :  when_:int ->
+  msg:char array ->
+  Output_stream.t ->
+  (unit, Portmidi_error.t) result
 
 val abort_output : Output_stream.t -> (unit, Portmidi_error.t) result
 val close_output : Output_stream.t -> (unit, Portmidi_error.t) result
