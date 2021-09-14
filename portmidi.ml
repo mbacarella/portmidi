@@ -216,7 +216,7 @@ module Functions = struct
     in
     let res = pm_write_sysex stream (Int32.of_int_exn when_) msg in
     match Data.result_of_pm_error res with
-    | Ok () -> Ok !@stream
+    | Ok () -> Ok ()
     | Error _ as e -> e
 
   let abort_output = abort
