@@ -6,12 +6,16 @@ minimize the bugspace.
 Installing
 ===
 
-`#opam install portmidi`
+```
+opam install portmidi
+```
 
 Status
 ---
 
-Not released to opam yet.  Try
+Not released to opam yet.  Still pretty devvy.  Open/read definitely works. Write is untested.
+
+Try
 
 ```
 opam pin add portmidi git+https://github.com/mbacarella/portmidi
