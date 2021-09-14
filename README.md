@@ -6,9 +6,12 @@ minimize the bugspace.
 Installing
 ===
 
+One day, you will be able to do
 ```
 opam install portmidi
 ```
+
+but see below.
 
 Status
 ---
