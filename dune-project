@@ -22,8 +22,6 @@
  (depends
   (ocaml
    (>= 4.03))
-  (dune
-   (>= 2.0))
   dune-configurator
   conf-pkg-config
   core_kernel
