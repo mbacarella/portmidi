@@ -44,10 +44,9 @@ module Portmidi_event = struct
       let status = Char.to_int status |> Int32.of_int_exn in
       let data1 = Char.to_int data1 |> Int32.of_int_exn in
       let data2 = Char.to_int data2 |> Int32.of_int_exn in
-      let status_masked = Int32.bit_and status 0xFFl in
-      let data1_masked = Int32.bit_and (Int32.( lsl ) data1 8) 0xFFl in
-      let data2_masked = Int32.bit_and (Int32.( lsl ) data2 16) 0xFFl in
-      Int32.bit_or status_masked data1_masked |> Int32.bit_or data2_masked
+      let data1_masked = Int32.( lsl ) data1 8 in
+      let data2_masked = Int32.( lsl ) data2 16 in
+      Int32.bit_or status data1_masked |> Int32.bit_or data2_masked
     in
     { message; timestamp }
 end
