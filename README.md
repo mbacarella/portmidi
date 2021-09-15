@@ -16,7 +16,7 @@ but see below.
 Status
 ---
 
-Not released to opam yet.  Still pretty devvy.  Open/read definitely works. Write is untested.
+Not released to opam yet.  Still pretty devvy.  Open/read/write works.  Reading sysex messages is untested so far.
 
 Try
 
