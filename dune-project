@@ -17,7 +17,7 @@
 
 (package
  (name portmidi)
- (synopsis "MP3 decoding library")
+ (synopsis "Bindings to libportmidi")
  (description "OCaml bindings to libportmidi")
  (depends
   (ocaml
