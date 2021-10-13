@@ -15,6 +15,7 @@ depends: [
   "core_kernel"
   "ctypes" {>= "0.13.0"}
   "ctypes-foreign"
+  "conf-libportmidi"
   "ppx_jane"
   "odoc" {with-doc}
 ]

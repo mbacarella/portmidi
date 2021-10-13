@@ -28,5 +28,5 @@
   (ctypes
    (>= 0.13.0))
   ctypes-foreign
-  ;    conf-libportmidi
+  conf-libportmidi
   ppx_jane))
