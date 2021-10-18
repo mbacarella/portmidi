@@ -21,7 +21,7 @@
  (description "OCaml bindings to libportmidi")
  (depends
   (ocaml
-   (>= 4.03))
+   (>= 4.07))
   dune-configurator
   conf-pkg-config
   core_kernel
@@ -29,4 +29,5 @@
    (>= 0.13.0))
   ctypes-foreign
   conf-libportmidi
-  ppx_jane))
+  (ppx_jane
+   (>= v0.12.0))))
