@@ -3,8 +3,8 @@ module C = Configurator.V1
 let () =
   C.main ~name:"foo" (fun c ->
       let default : C.Pkg_config.package_conf =
-        { libs = [ "-lportmidi"; "-L/opt/homebrew/Cellar/portmidi/217_2/lib/" ];
-          cflags = [ "-I/usr/include"; "-I/opt/homebrew/Cellar/portmidi/217_2/include/" ]
+        { libs = [ "-lportmidi"; "-L/opt/homebrew/lib" ];
+          cflags = [ "-I/usr/include"; "-I/opt/homebrew/include" ]
         }
       in
       let conf =
