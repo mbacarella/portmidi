@@ -3,7 +3,9 @@ module C = Configurator.V1
 let () =
   C.main ~name:"foo" (fun c ->
       let default : C.Pkg_config.package_conf =
-        { libs = [ "-lportmidi" ]; cflags = [ "-I/usr/include" ] }
+        { libs = [ "-lportmidi"; "-L/opt/homebrew/lib" ];
+          cflags = [ "-I/usr/include"; "-I/opt/homebrew/include" ]
+        }
       in
       let conf =
         match C.Pkg_config.get c with
