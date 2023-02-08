@@ -76,3 +76,7 @@ val write_output_sysex
 
 val abort_output : Output_stream.t -> (unit, Portmidi_error.t) result
 val close_output : Output_stream.t -> (unit, Portmidi_error.t) result
+
+module Porttime : sig
+  val time : unit -> int32
+end
