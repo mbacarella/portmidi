@@ -1,4 +1,4 @@
-0.2
+0.4
 ----------
 * Shims to build on brew
 * Created binding for Pt_Time function #2 @BridgeTheMasterBuilder
