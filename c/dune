@@ -72,6 +72,7 @@
   (language c)
   (names c_generated_functions)
   (flags
-   (:include c_flags.sexp)))
+   ((:include c_flags.sexp)
+    (-Wno-discarded-qualifiers))))
  (c_library_flags
   (:include c_library_flags.sexp)))
