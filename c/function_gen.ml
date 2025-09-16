@@ -10,6 +10,7 @@ let () =
       (module Portmidi_c_function_descriptions.Functions)
   | "c" ->
     print_endline "#include <portmidi.h>";
+    print_endline "#include <porttime.h>";
     Cstubs.write_c
       ~concurrency
       Format.std_formatter
