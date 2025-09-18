@@ -26,8 +26,9 @@
   conf-pkg-config
   core_kernel
   (ctypes
-   (>= 0.13.0))
-  ctypes-foreign
+   (>= 0.21.1))
+  (ctypes-foreign
+   (>= 0.21.1))
   conf-libportmidi
   (ppx_jane
    (>= v0.12.0))))
